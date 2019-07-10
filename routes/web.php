@@ -10,4 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', 'PedidoController@index');
+
 Route::resource('produtos', 'ProdutoController');
+
+Route::resource('pedidos', 'PedidoController');
