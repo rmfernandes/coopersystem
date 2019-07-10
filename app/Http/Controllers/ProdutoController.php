@@ -56,9 +56,11 @@ class ProdutoController extends AppBaseController
     {
         $input = $request->all();
 
+        $input['situacao'] = $this->getSituacao($input['qtd_estoque']);
+
         $produto = $this->produtoRepository->create($input);
 
-        Flash::success('Produto saved successfully.');
+        Flash::success('Produto criado com sucesso.');
 
         return redirect(route('produtos.index'));
     }
@@ -75,7 +77,7 @@ class ProdutoController extends AppBaseController
         $produto = $this->produtoRepository->find($id);
 
         if (empty($produto)) {
-            Flash::error('Produto not found');
+            Flash::error('Produto não encontrado.');
 
             return redirect(route('produtos.index'));
         }
@@ -95,7 +97,7 @@ class ProdutoController extends AppBaseController
         $produto = $this->produtoRepository->find($id);
 
         if (empty($produto)) {
-            Flash::error('Produto not found');
+            Flash::error('Produto não encontrado.');
 
             return redirect(route('produtos.index'));
         }
@@ -116,14 +118,18 @@ class ProdutoController extends AppBaseController
         $produto = $this->produtoRepository->find($id);
 
         if (empty($produto)) {
-            Flash::error('Produto not found');
+            Flash::error('Produto não encontrado.');
 
             return redirect(route('produtos.index'));
         }
 
-        $produto = $this->produtoRepository->update($request->all(), $id);
+        $input = $request->all();
 
-        Flash::success('Produto updated successfully.');
+        $input['situacao'] = $this->getSituacao($input['qtd_estoque']);
+
+        $produto = $this->produtoRepository->update($input, $id);
+
+        Flash::success('Produto atualizado com sucesso.');
 
         return redirect(route('produtos.index'));
     }
@@ -142,15 +148,30 @@ class ProdutoController extends AppBaseController
         $produto = $this->produtoRepository->find($id);
 
         if (empty($produto)) {
-            Flash::error('Produto not found');
+            Flash::error('Produto não encontrado.');
 
             return redirect(route('produtos.index'));
         }
 
         $this->produtoRepository->delete($id);
 
-        Flash::success('Produto deleted successfully.');
+        Flash::success('Produto apagado com sucesso.');
 
         return redirect(route('produtos.index'));
+    }
+
+    /**
+     * Ajusta situacao do produto
+     * 
+     * @param int $qtd
+     * 
+     * @return string
+     */
+    private function getSituacao($qtd) {
+        if ($qtd > 0) {
+            return 'DISP';
+        } else {
+            return 'IDSP';
+        }
     }
 }

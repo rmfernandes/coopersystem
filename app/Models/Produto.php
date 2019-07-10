@@ -28,7 +28,8 @@ class Produto extends Model
     public $fillable = [
         'nome',
         'valor_unitario',
-        'qtd_estoque'
+        'qtd_estoque',
+        'situacao'
     ];
 
     /**
@@ -53,7 +54,29 @@ class Produto extends Model
         'nome' => 'required',
         'valor_unitario' => 'required|regex:/^\d+(\.\d{1,4})?$/',
         'qtd_estoque' => 'required|integer|min:0',
+        'situacao' => 'in:DISP,IDSP'
     ];
 
-    
+    /**
+     * Retorna a situacao em formato legível por humanos
+     * 
+     * @param string $value
+     * 
+     * @throws \Exception
+     * 
+     * @return string
+     */
+    public function getSituacaoAttribute($value) {
+        switch ($value) {
+            case 'DISP':
+                return 'Disponível';
+                break;
+            case 'IDSP':
+                return 'Indisponível';
+                break;
+            default:
+                Flash::error("Situação $value desconhecida.");
+        }
+    }
+
 }
