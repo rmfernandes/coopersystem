@@ -79,8 +79,8 @@ class Pedido extends Model
      */
     public static $rules = [
         'produto' => 'required|exists:produtos,id',
-        'qtd' => 'required|min:0',
-        'valor_unitario' => 'required|regex:/^\d+(\,\d{1,4})?$/',
+        'qtd' => 'required|integer|min:1',
+        'valor_unitario' => 'required|regex:/^\d+(\.\d{1,2})?$/|min:0.01',
         'data' => 'required|after_or_equal:today',
         'solicitante' => 'required',
         'cep' => 'required|size:9',
@@ -93,5 +93,133 @@ class Pedido extends Model
         'situacao' => 'required|in:PNDT,ENVD,ENTR'
     ];
 
-    
+    /**
+     * Events
+     * 
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'saving' => \App\Events\PedidoSaving::class
+    ];
+
+    public function produto() {
+        return $this->belongsTo(Produto::class, 'produto', 'id');
+    }
+
+    /**
+     * Retorna a situacao formatada
+     * 
+     * @param string $value
+     * 
+     * @throws \Exception
+     * 
+     * @return string
+     */
+    public function getSituacaoFormatadaAttribute($value) {
+        return Pedido::formataSituacao($this->situacao);
+    }
+
+    /**
+     * Formata a situacao
+     * 
+     * @param string $situacao
+     * 
+     * @return string
+     * 
+     * @todo Transformar em Helper
+     */
+    public static function formataSituacao($situacao) {
+        switch ($situacao) {
+            case 'PNDT':
+                return 'Pendente de Envio';
+                break;
+            case 'ENVD':
+                return 'Enviado';
+                break;
+            case 'ENTR':
+                return 'Entregue';
+                break;
+            default:
+                return 'ERRO!';
+        }
+    }
+
+    /**
+     * Define todas as situações possíveis
+     * 
+     * @param string $situacao
+     * 
+     * @return array
+     * 
+     * @todo Transformar em Helper
+     */
+    public static function situacoesPossiveis($situacao) {
+        switch ($situacao) {
+            case 'PNDT':
+                return array('PNDT', 'ENVD');
+            case 'ENVD':
+                return array('ENVD', 'ENTR');
+            case 'ENTR':
+                return array('ENTR');
+            default:
+                return array();
+        }
+    }
+
+    /**
+     * Retorna a data formatada
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getDataFormatadaAttribute($value) {
+        return date("d/m/Y", strtotime($this->getAttributes()['data']));
+    }
+
+    /**
+     * Converte a Data; Datetime->Date
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getDataAttribute($value) {
+        return date("Y-m-d", strtotime($value));
+    }
+
+    /**
+     * Retorna o pedido formatado
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getProdutoFormatadoAttribute($value) {
+        $produto = Produto::find($this->produto);
+        return $produto->nome;
+    }
+
+    /**
+     * Formata o valor unitario para os campos internos
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getValorUnitarioAttribute($value) {
+        return number_format($value, 2);
+    }
+
+    /**
+     * Formata o valor unitario para a listagem
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getValorUnitarioFormatadoAttribute($value) {
+        return 'R$' . number_format($this->valor_unitario, 2, ',', '');
+    }
+
 }

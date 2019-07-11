@@ -7,13 +7,13 @@
 <!-- Valor Unitario Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('valor_unitario', 'Valor Unitário:') !!}
-    {!! Form::number('valor_unitario', null, ['class' => 'form-control', 'step' => '0.01']) !!}
+    {!! Form::number('valor_unitario', null, ['class' => 'form-control', 'step' => '0.01', 'min' => '0.01']) !!}
 </div>
 
 <!-- Qtd Estoque Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('qtd_estoque', 'Quantidade Estoque:') !!}
-    {!! Form::number('qtd_estoque', null, ['class' => 'form-control']) !!}
+    {!! Form::number('qtd_estoque', null, ['class' => 'form-control', 'min' => '0']) !!}
 </div>
 
 <!-- Situacao Field -->

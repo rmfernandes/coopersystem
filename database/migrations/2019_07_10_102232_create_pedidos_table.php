@@ -17,7 +17,7 @@ class CreatePedidosTable extends Migration
             $table->increments('id');
             $table->integer('produto');
             $table->integer('qtd');
-            $table->decimal('valor_unitario', 13, 4);
+            $table->decimal('valor_unitario', 13, 2);
             $table->date('data');
             $table->string('solicitante');
             $table->string('cep', 9);

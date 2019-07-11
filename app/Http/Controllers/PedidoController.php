@@ -9,6 +9,9 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Rules\QuantidadeEstoque;
+use App\Rules\SituacaoPedido;
+use App\Models\Pedido;
 
 class PedidoController extends AppBaseController
 {
@@ -42,7 +45,11 @@ class PedidoController extends AppBaseController
      */
     public function create()
     {
-        return view('pedidos.create');
+        $situacoes = array(
+            'PNDT' => Pedido::formataSituacao('PNDT'),
+        );
+
+        return view('pedidos.create')->with('situacoes', $situacoes);
     }
 
     /**
@@ -56,9 +63,13 @@ class PedidoController extends AppBaseController
     {
         $input = $request->all();
 
+        $request->validate([
+            'qtd' => [new QuantidadeEstoque($input['produto'])]
+        ]);
+
         $pedido = $this->pedidoRepository->create($input);
 
-        Flash::success('Pedido saved successfully.');
+        Flash::success('Pedido criado com sucesso.');
 
         return redirect(route('pedidos.index'));
     }
@@ -75,7 +86,7 @@ class PedidoController extends AppBaseController
         $pedido = $this->pedidoRepository->find($id);
 
         if (empty($pedido)) {
-            Flash::error('Pedido not found');
+            Flash::error('Pedido não encontrado.');
 
             return redirect(route('pedidos.index'));
         }
@@ -95,12 +106,25 @@ class PedidoController extends AppBaseController
         $pedido = $this->pedidoRepository->find($id);
 
         if (empty($pedido)) {
-            Flash::error('Pedido not found');
+            Flash::error('Pedido não encontrado.');
 
             return redirect(route('pedidos.index'));
         }
 
-        return view('pedidos.edit')->with('pedido', $pedido);
+        if ($pedido->situacao == 'ENTR') {
+            Flash::error('Não é possível alterar pedidos após entregues.');
+
+            return redirect(route('pedidos.index'));
+        }
+
+        $situacoes = array();
+
+        $arr = Pedido::situacoesPossiveis($pedido->situacao);
+        foreach ($arr as $situacao) {
+            $situacoes[$situacao] = Pedido::formataSituacao($situacao);
+        }
+
+        return view('pedidos.edit')->with('pedido', $pedido)->with('situacoes', $situacoes);
     }
 
     /**
@@ -116,14 +140,30 @@ class PedidoController extends AppBaseController
         $pedido = $this->pedidoRepository->find($id);
 
         if (empty($pedido)) {
-            Flash::error('Pedido not found');
+            Flash::error('Pedido não encontrado.');
 
             return redirect(route('pedidos.index'));
         }
 
-        $pedido = $this->pedidoRepository->update($request->all(), $id);
+        $input = $request->all();
 
-        Flash::success('Pedido updated successfully.');
+        $request->validate([
+            'situacao' => [new SituacaoPedido($pedido->situacao)]
+        ]);
+
+        if ($pedido->produto == $input['produto']) {
+            $request->validate([
+                'qtd' => [new QuantidadeEstoque($input['produto'], $pedido->qtd)]
+            ]);    
+        } else {
+            $request->validate([
+                'qtd' => [new QuantidadeEstoque($input['produto'])]
+            ]);
+        }
+
+        $pedido = $this->pedidoRepository->update($input, $id);
+
+        Flash::success('Pedido atualizado com sucesso.');
 
         return redirect(route('pedidos.index'));
     }
@@ -142,14 +182,14 @@ class PedidoController extends AppBaseController
         $pedido = $this->pedidoRepository->find($id);
 
         if (empty($pedido)) {
-            Flash::error('Pedido not found');
+            Flash::error('Pedido não encontrado.');
 
             return redirect(route('pedidos.index'));
         }
 
         $this->pedidoRepository->delete($id);
 
-        Flash::success('Pedido deleted successfully.');
+        Flash::success('Pedido apagado com sucesso.');
 
         return redirect(route('pedidos.index'));
     }

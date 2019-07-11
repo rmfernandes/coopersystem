@@ -56,8 +56,6 @@ class ProdutoController extends AppBaseController
     {
         $input = $request->all();
 
-        $input['situacao'] = $this->getSituacao($input['qtd_estoque']);
-
         $produto = $this->produtoRepository->create($input);
 
         Flash::success('Produto criado com sucesso.');
@@ -125,8 +123,6 @@ class ProdutoController extends AppBaseController
 
         $input = $request->all();
 
-        $input['situacao'] = $this->getSituacao($input['qtd_estoque']);
-
         $produto = $this->produtoRepository->update($input, $id);
 
         Flash::success('Produto atualizado com sucesso.');
@@ -158,20 +154,5 @@ class ProdutoController extends AppBaseController
         Flash::success('Produto apagado com sucesso.');
 
         return redirect(route('produtos.index'));
-    }
-
-    /**
-     * Ajusta situacao do produto
-     * 
-     * @param int $qtd
-     * 
-     * @return string
-     */
-    private function getSituacao($qtd) {
-        if ($qtd > 0) {
-            return 'DISP';
-        } else {
-            return 'IDSP';
-        }
     }
 }

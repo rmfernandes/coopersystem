@@ -52,22 +52,44 @@ class Produto extends Model
      */
     public static $rules = [
         'nome' => 'required',
-        'valor_unitario' => 'required|regex:/^\d+(\.\d{1,4})?$/',
+        'valor_unitario' => 'required|regex:/^\d+(\.\d{1,2})?$/|min:0.01',
         'qtd_estoque' => 'required|integer|min:0',
         'situacao' => 'in:DISP,IDSP'
     ];
+
+    /**
+     * Events
+     * 
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'saving' => \App\Events\ProdutoSaving::class
+    ];
+
+    /**
+     * Ajusta situacao do produto
+     * 
+     * @param int $qtd
+     * 
+     * @return string
+     */
+    public function getSituacaoAttribute($value) {
+        if ($this->qtd_estoque > 0) {
+            return 'DISP';
+        } else {
+            return 'IDSP';
+        }
+    }
 
     /**
      * Retorna a situacao em formato legível por humanos
      * 
      * @param string $value
      * 
-     * @throws \Exception
-     * 
      * @return string
      */
-    public function getSituacaoAttribute($value) {
-        switch ($value) {
+    public function getSituacaoFormatadaAttribute($value) {
+        switch ($this->situacao) {
             case 'DISP':
                 return 'Disponível';
                 break;
@@ -75,8 +97,30 @@ class Produto extends Model
                 return 'Indisponível';
                 break;
             default:
-                Flash::error("Situação $value desconhecida.");
+                return 'ERRO!';
         }
+    }
+
+    /**
+     * Formata o valor unitario para os campos internos
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getValorUnitarioAttribute($value) {
+        return number_format($value, 2);
+    }
+
+    /**
+     * Formata o valor unitario para a listagem
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public function getValorUnitarioFormatadoAttribute($value) {
+        return 'R$' . number_format($this->valor_unitario, 2, ',', '');
     }
 
 }

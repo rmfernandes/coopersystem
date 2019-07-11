@@ -13,7 +13,7 @@
 <!-- Valor Unitario Field -->
 <div class="form-group">
     {!! Form::label('valor_unitario', 'Valor Unitário:') !!}
-    <p>{!! $produto->valor_unitario !!}</p>
+    <p>{!! $produto->valor_unitario_formatado !!}</p>
 </div>
 
 <!-- Qtd Estoque Field -->
@@ -25,7 +25,7 @@
 <!-- Situacao Field -->
 <div class="form-group">
     {!! Form::label('situacao', 'Situação:') !!}
-    <p>{!! $produto->situacao !!}</p>
+    <p>{!! $produto->situacao_formatada !!}</p>
 </div>
 
 <!-- Created At Field -->
