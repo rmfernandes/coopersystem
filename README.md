@@ -1,4 +1,4 @@
-<p>Teste Desenvolvedor PHP - Ricardo Fernandes</p>
+## Teste Desenvolvedor PHP - Ricardo Fernandes
 <p>Para executar:
 -Fazer clone/download do projeto
 -Abrir um prompt de comando ou shell na pasta que foi feito o clone/download
