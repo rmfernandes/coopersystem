@@ -13,6 +13,8 @@
 
 Route::get('/', 'PedidoController@index');
 
+Route::get('/valor/{id}', 'ValorController@getValor');
+
 Route::resource('produtos', 'ProdutoController');
 
 Route::resource('pedidos', 'PedidoController');

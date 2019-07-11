@@ -12,6 +12,7 @@ use Response;
 use App\Rules\QuantidadeEstoque;
 use App\Rules\SituacaoPedido;
 use App\Models\Pedido;
+use App\Models\Produto;
 
 class PedidoController extends AppBaseController
 {
@@ -49,7 +50,15 @@ class PedidoController extends AppBaseController
             'PNDT' => Pedido::formataSituacao('PNDT'),
         );
 
-        return view('pedidos.create')->with('situacoes', $situacoes);
+        $produtos = Produto::select('id', 'nome')->orderBy('id', 'asc')->get();
+
+        $selectProdutos = array();
+
+        foreach($produtos as $produto) {
+            $selectProdutos[$produto->id] = $produto->nome;
+        }
+
+        return view('pedidos.create')->with('produtos', $selectProdutos)->with('situacoes', $situacoes);
     }
 
     /**
@@ -115,6 +124,22 @@ class PedidoController extends AppBaseController
             Flash::error('Não é possível alterar pedidos após entregues.');
 
             return redirect(route('pedidos.index'));
+        } elseif ($pedido->situacao != 'PNDT') { //PNDT é o unico que permite alterações, feito desta forma caso sejam adicionados novas situações
+            $restrito = true;
+        } else {
+            $restrito = false;
+        }
+
+        if ($restrito) { //economiza select
+            $produtos = Produto::select('id', 'nome')->where('id', $pedido->produto)->orderBy('id', 'asc')->get();
+        } else {
+            $produtos = Produto::select('id', 'nome')->orderBy('id', 'asc')->get();
+        }
+
+        $selectProdutos = array();
+
+        foreach($produtos as $produto) {
+            $selectProdutos[$produto->id] = $produto->nome;
         }
 
         $situacoes = array();
@@ -124,7 +149,9 @@ class PedidoController extends AppBaseController
             $situacoes[$situacao] = Pedido::formataSituacao($situacao);
         }
 
-        return view('pedidos.edit')->with('pedido', $pedido)->with('situacoes', $situacoes);
+        
+
+        return view('pedidos.edit')->with('pedido', $pedido)->with('produtos', $selectProdutos)->with('situacoes', $situacoes)->with('restrito', $restrito);
     }
 
     /**

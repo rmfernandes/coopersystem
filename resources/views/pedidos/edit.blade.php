@@ -12,11 +12,7 @@
            <div class="box-body">
                <div class="row">
                    {!! Form::model($pedido, ['route' => ['pedidos.update', $pedido->id], 'method' => 'patch']) !!}
-                        @if($pedido->situacao != 'PNDT')
-                            @include('pedidos.fields', ['situacoes' => $situacoes, 'situacaoReadonly' => false, 'restrito' => true])
-                        @else
-                            @include('pedidos.fields', ['situacoes' => $situacoes, 'situacaoReadonly' => false, 'restrito' => false])
-                        @endif
+                        @include('pedidos.fields', ['produtos' => $produtos, 'situacoes' => $situacoes, 'situacaoReadonly' => false, 'restrito' => $restrito])
 
                    {!! Form::close() !!}
                </div>

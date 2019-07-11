@@ -1,20 +1,65 @@
 <!-- Produto Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('produto', 'Produto:') !!}
-    {!! Form::text('produto', null, ['class' => 'form-control', 'readonly' => $restrito]) !!}
+    @if($restrito)
+        {!! Form::select('produto', $produtos, $pedido->produto, ['class' => 'form-control', 'readonly' => $restrito]); !!}
+    @else
+        {!! Form::select('produto', $produtos, null, ['class' => 'form-control', 'id' => 'produto', 'readonly' => $restrito]); !!}
+    @endif
 </div>
 
 <!-- Qtd Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('qtd', 'Quantidade:') !!}
-    {!! Form::number('qtd', null, ['class' => 'form-control', 'min' => '1', 'readonly' => $restrito]) !!}
+    {!! Form::number('qtd', null, ['class' => 'form-control', 'id' => 'qtd', 'min' => '1', 'readonly' => $restrito]) !!}
 </div>
 
 <!-- Valor Unitario Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('valor_unitario', 'Valor Unitário:') !!}
-    {!! Form::number('valor_unitario', null, ['class' => 'form-control', 'step' => '0.01', 'min' => '0.01', 'readonly' => $restrito]) !!}
+    {!! Form::number('valor_unitario', null, ['class' => 'form-control', 'id' => 'valor_unitario', 'step' => '0.01', 'min' => '0.01', 'readonly' => $restrito]) !!}
 </div>
+@section('scripts')
+    <script type="text/javascript">
+        function adcVirgulas(valor) {
+            valor += '';
+            if (valor.indexOf('.') !== -1) {
+                p = valor.split('.');
+                p1 = p[0];
+                p2 = p[1];
+                while (p2.length < 2) {
+                    p2 += '0';
+                }
+            } else {
+                p1 = valor;
+                p2 = '00';
+            }
+            return p1 + '.' + p2;
+
+        }
+
+        function getValor() {
+            $.ajax({
+                url: '/valor/' + $("#produto").val(),
+                type: 'get',
+                data: {},
+                success: function(data) {
+                if (data.success == true) {
+                    valor_unitario = data.valor * $('#qtd').val();
+                    $("#valor_unitario").val(adcVirgulas(valor_unitario));
+                } else {
+                    alert('Erro ao recuperar o valor unitário');
+                }
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {}
+            });
+        }
+
+        $("#produto").change(getValor);
+        $("#qtd").change(getValor);
+    </script>
+@endsection
 
 <!-- Data Field -->
 <div class="form-group col-sm-6">
@@ -27,7 +72,7 @@
         $('#data').datetimepicker({
             format: 'YYYY-MM-DD',
             useCurrent: true
-        })
+        });
     </script>
 @endsection
 

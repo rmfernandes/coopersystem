@@ -78,7 +78,7 @@ class Pedido extends Model
      * @var array
      */
     public static $rules = [
-        'produto' => 'required|exists:produtos,id',
+        'produto' => 'required|integer|exists:produtos,id',
         'qtd' => 'required|integer|min:1',
         'valor_unitario' => 'required|regex:/^\d+(\.\d{1,2})?$/|min:0.01',
         'data' => 'required|after_or_equal:today',
