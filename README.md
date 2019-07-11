@@ -1,14 +1,14 @@
 ## Teste Desenvolvedor PHP - Ricardo Fernandes
-Para executar:
--Fazer clone/download do projeto
--Abrir um prompt de comando ou shell na pasta que foi feito o clone/download
--Executar ```composer install```
--Executar ```cp .env.example .env```
--Alterar o arquivo .env com os dados necessários para conexão do banco (DB_*)
--Executar ```php artisan key:generate```
--Executar ```php artisan migrate```
--Executar ```php artisan serve```
--Acessar ```localhost:8000```
+Para executar:  
+-Fazer clone/download do projeto  
+-Abrir um prompt de comando ou shell na pasta que foi feito o clone/download  
+-Executar ```composer install```  
+-Executar ```cp .env.example .env```  
+-Alterar o arquivo .env com os dados necessários para conexão do banco (DB_*)  
+-Executar ```php artisan key:generate```  
+-Executar ```php artisan migrate```  
+-Executar ```php artisan serve```  
+-Acessar ```localhost:8000```  
 
 
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
