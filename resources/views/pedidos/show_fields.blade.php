@@ -7,7 +7,7 @@
 <!-- Produto Field -->
 <div class="form-group">
     {!! Form::label('produto', 'Produto:') !!}
-    <p>{!! $pedido->produto !!}</p>
+    <p>{!! $pedido->produto_formatado !!}</p>
 </div>
 
 <!-- Qtd Field -->
@@ -19,13 +19,13 @@
 <!-- Valor Unitario Field -->
 <div class="form-group">
     {!! Form::label('valor_unitario', 'Valor Unitário:') !!}
-    <p>{!! $pedido->valor_unitario !!}</p>
+    <p>{!! $pedido->valor_unitario_formatado !!}</p>
 </div>
 
 <!-- Data Field -->
 <div class="form-group">
     {!! Form::label('data', 'Data do Pedido:') !!}
-    <p>{!! $pedido->data !!}</p>
+    <p>{!! $pedido->data_formatada !!}</p>
 </div>
 
 <!-- Solicitante Field -->
@@ -79,7 +79,7 @@
 <!-- Situacao Field -->
 <div class="form-group">
     {!! Form::label('situacao', 'Situação:') !!}
-    <p>{!! $pedido->situacao !!}</p>
+    <p>{!! $pedido->situacao_formatada !!}</p>
 </div>
 
 <!-- Created At Field -->

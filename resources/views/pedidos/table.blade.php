@@ -21,10 +21,10 @@
         <tbody>
         @foreach($pedidos as $pedido)
             <tr>
-                <td>{!! $pedido->produto !!}</td>
+            <td>{!! $pedido->produto_formatado !!}</td>
             <td>{!! $pedido->qtd !!}</td>
-            <td>{!! $pedido->valor_unitario !!}</td>
-            <td>{!! $pedido->data !!}</td>
+            <td>{!! $pedido->valor_unitario_formatado !!}</td>
+            <td>{!! $pedido->data_formatada !!}</td>
             <td>{!! $pedido->solicitante !!}</td>
             <td>{!! $pedido->cep !!}</td>
             <td>{!! $pedido->uf !!}</td>
@@ -33,7 +33,7 @@
             <td>{!! $pedido->rua !!}</td>
             <td>{!! $pedido->numero !!}</td>
             <td>{!! $pedido->despachante !!}</td>
-            <td>{!! $pedido->situacao !!}</td>
+            <td>{!! $pedido->situacao_formatada !!}</td>
                 <td>
                     {!! Form::open(['route' => ['pedidos.destroy', $pedido->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

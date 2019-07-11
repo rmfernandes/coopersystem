@@ -88,7 +88,7 @@ return [
         'numeric' => 'O campo :attribute deve ser pelo menos :min.',
         'file'    => 'O campo :attribute deve ter pelo menos :min kilobytes.',
         'string'  => 'O campo :attribute deve ter pelo menos :min caracteres.',
-        'array'   => 'O campo :attribute deve ter pelo menos :min itens.',
+        'array'   => 'O campo :attribute deve conter pelo menos :min itens.',
     ],
     'not_in'               => 'O campo :attribute selecionado é inválido.',
     'not_regex'            => 'O campo :attribute possui um formato inválido.',
@@ -105,8 +105,8 @@ return [
     'same'                 => 'Os campos :attribute e :other devem corresponder.',
     'size'                 => [
         'numeric' => 'O campo :attribute deve ser :size.',
-        'file'    => 'O campo :attribute deve ser :size kilobytes.',
-        'string'  => 'O campo :attribute deve ser :size caracteres.',
+        'file'    => 'O campo :attribute deve ter :size kilobytes.',
+        'string'  => 'O campo :attribute deve ter :size caracteres.',
         'array'   => 'O campo :attribute deve conter :size itens.',
     ],
     'starts_with'          => 'O campo :attribute deve começar com um dos seguintes valores: :values',
@@ -129,8 +129,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'data' => [
+            'after_or_equal' => 'O campo :attribute deve ser uma data posterior ou igual a hoje.',
+        ],
+        'cep' => [
+            'size' => 'O campo :attribute deve ter :size caracteres, no formato XXXXX-XXX.',
         ],
     ],
 
@@ -145,6 +148,22 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => array(
+        'nome' => 'Nome',
+        'valor_unitario' => 'Valor Unitário',
+        'qtd_estoque' => 'Quantidade Estoque',
+        'situacao' => 'Situação',
+        'produto' => 'Produto',
+        'qtd' => 'Quantidade',
+        'data' => 'Data do Pedido',
+        'solicitante' => 'Solicitante',
+        'cep' => 'CEP',
+        'uf' => 'UF',
+        'municipio' => 'Município',
+        'bairro' => 'Bairro',
+        'rua' => 'Rua',
+        'numero' => 'Número',
+        'despachante' => 'Despachante',
+    ),
 
 ];

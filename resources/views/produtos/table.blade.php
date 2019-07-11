@@ -13,9 +13,9 @@
         @foreach($produtos as $produto)
             <tr>
                 <td>{!! $produto->nome !!}</td>
-            <td>{!! $produto->valor_unitario !!}</td>
-            <td>{!! $produto->qtd_estoque !!}</td>
-            <td>{!! $produto->situacao !!}</td>
+                <td>{!! $produto->valor_unitario_formatado !!}</td>
+                <td>{!! $produto->qtd_estoque !!}</td>
+                <td>{!! $produto->situacao_formatada !!}</td>
                 <td>
                     {!! Form::open(['route' => ['produtos.destroy', $produto->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
