@@ -19,8 +19,20 @@
     {!! Form::label('valor_unitario', 'Valor Unitário:') !!}
     {!! Form::number('valor_unitario', null, ['class' => 'form-control', 'id' => 'valor_unitario', 'step' => '0.01', 'min' => '0.01', 'readonly' => $restrito]) !!}
 </div>
+
+<!-- Data Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('data', 'Data do Pedido:') !!}
+    {!! Form::date('data', null, ['class' => 'form-control','id'=>'data', 'readonly' => $restrito]) !!}
+</div>
+
 @section('scripts')
     <script type="text/javascript">
+        $('#data').datetimepicker({
+            format: 'YYYY-MM-DD',
+            useCurrent: true
+        });
+
         function adcVirgulas(valor) {
             valor += '';
             if (valor.indexOf('.') !== -1) {
@@ -58,21 +70,7 @@
 
         $("#produto").change(getValor);
         $("#qtd").change(getValor);
-    </script>
-@endsection
 
-<!-- Data Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('data', 'Data do Pedido:') !!}
-    {!! Form::date('data', null, ['class' => 'form-control','id'=>'data', 'readonly' => $restrito]) !!}
-</div>
-
-@section('scripts')
-    <script type="text/javascript">
-        $('#data').datetimepicker({
-            format: 'YYYY-MM-DD',
-            useCurrent: true
-        });
     </script>
 @endsection
 
